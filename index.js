@@ -35,7 +35,7 @@ let displayValue = '';
             if (displayValue !== '') {
                 if (firstNumber !== null && operator !== '') {
                     // If both first number and operator are already set, perform the calculation
-                    calculate();
+                    operate();
                 }
                 if (!isNaN(parseFloat(displayValue))) { // Check if the displayValue is a valid number
                     firstNumber = parseFloat(displayValue);
@@ -45,24 +45,31 @@ let displayValue = '';
             }
         }
         
-        function calculate() {
-            let result;
+        function operate() {
             const secondNumber = parseFloat(displayValue); // Convert displayValue to float
             if (!isNaN(firstNumber) && !isNaN(secondNumber)) { // Check if both firstNumber and secondNumber are valid numbers
-                if (operator === '+') {
-                    result = firstNumber + secondNumber;
-                } else if (operator === '-') {
-                    result = firstNumber - secondNumber;
-                } else if (operator === '*') {
-                    result = firstNumber * secondNumber;
-                } else if (operator === '/') {
-                    if (secondNumber !== 0) {
-                        result = firstNumber / secondNumber;
-                    } else {
-                        document.getElementById('display').value = "Error: Division by zero";
-                        clearDisplay();
+                let result;
+                switch (operator) {
+                    case '+':
+                        result = firstNumber + secondNumber;
+                        break;
+                    case '-':
+                        result = firstNumber - secondNumber;
+                        break;
+                    case '*':
+                        result = firstNumber * secondNumber;
+                        break;
+                    case '/':
+                        if (secondNumber !== 0) {
+                            result = firstNumber / secondNumber;
+                        } else {
+                            document.getElementById('display').value = "Error: Division by zero";
+                            clearDisplay();
+                            return;
+                        }
+                        break;
+                    default:
                         return;
-                    }
                 }
                 document.getElementById('display').value = Math.round(result * 100) / 100; // Round to 2 decimal places
                 firstNumber = result; // Update first number with the result as a number
@@ -76,6 +83,7 @@ let displayValue = '';
         
         function clearDisplay() {
             displayValue = '';
+            firstNumber = null;
             operator = '';
             resultDisplayed = false;
             document.getElementById('display').value = '';
